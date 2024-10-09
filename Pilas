@@ -1,0 +1,51 @@
+class Pila:
+    def __init__(self):
+        self.items = []
+
+    def apilar(self, item):
+        self.items.append(item)
+
+    def desapilar(self):
+        if not self.esta_vacia():
+            return self.items.pop()
+        return None
+
+    def esta_vacia(self):
+        return len(self.items) == 0
+
+    def cima(self):
+        if not self.esta_vacia():
+            return self.items[-1]
+        return None
+
+class ColaConPilas:
+    def __init__(self):
+        self.pila_in = Pila()
+        self.pila_out = Pila()
+
+    def enqueue(self, item):
+        self.pila_in.apilar(item)
+
+    def dequeue(self):
+        if self.pila_out.esta_vacia():
+            while not self.pila_in.esta_vacia():
+                self.pila_out.apilar(self.pila_in.desapilar())
+        return self.pila_out.desapilar()
+
+    def esta_vacia(self):
+        return self.pila_in.esta_vacia() and self.pila_out.esta_vacia()
+
+    def tamaño(self):
+        return len(self.pila_in.items) + len(self.pila_out.items)
+
+# Ejemplo de uso
+cola = ColaConPilas()
+cola.enqueue(1)
+cola.enqueue(2)
+cola.enqueue(3)
+
+print(cola.dequeue())  # Salida: 1
+print(cola.dequeue())  # Salida: 2
+print(cola.esta_vacia())  # Salida: False
+print(cola.dequeue())  # Salida: 3
+print(cola.esta_vacia())  # Salida: True
